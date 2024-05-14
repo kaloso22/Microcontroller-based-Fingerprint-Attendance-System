@@ -6,6 +6,7 @@
 #include <SoftwareSerial.h>
 
 // Fingerprint scanner pins
+//be sure to change the keypad configuration to suit your connection
 #define Finger_Rx 14 // D5
 #define Finger_Tx 12 // D6
 #define key1 2
@@ -144,22 +145,22 @@ uint8_t readNumberFromKeypad(void) {
     int key3S = digitalRead(key3);
     int key4S = digitalRead(key4);
 
-    if (!key2S) {
+    if (!key1S) {
       // Increment ID by 1
       id++;
+      while (!digitalRead(key1)) {} // Wait for button release
+    }
+
+    if (!key2S) {
+      // Increment ID by 10
+      id += 10;
       while (!digitalRead(key2)) {} // Wait for button release
     }
 
     if (!key3S) {
-      // Increment ID by 10
-      id += 10;
-      while (!digitalRead(key3)) {} // Wait for button release
-    }
-
-    if (!key1S) {
       // Decrement ID by 5
       id -= 5;
-      while (!digitalRead(key1)) {} // Wait for button release
+      while (!digitalRead(key3)) {} // Wait for button release
     }
 
     if (!key4S) {
@@ -244,22 +245,22 @@ void deleteFingerprint() {
         int key3S = digitalRead(key3);
         int key4S = digitalRead(key4);
 
-        if (!key2S) {
+        if (!key1S) {
             // Increment ID by 1
             id = (id % 127) + 1;
+            while (!digitalRead(key1)) {} // Wait for button release
+        }
+
+        if (!key2S) {
+            // Increment ID by 10
+            id = ((id + 9) % 127) + 1;
             while (!digitalRead(key2)) {} // Wait for button release
         }
 
         if (!key3S) {
-            // Increment ID by 10
-            id = ((id + 9) % 127) + 1;
-            while (!digitalRead(key3)) {} // Wait for button release
-        }
-
-        if (!key1S) {
             // Decrement ID by 5
             id = ((id - 6 + 127) % 127) + 1;
-            while (!digitalRead(key1)) {} // Wait for button release
+            while (!digitalRead(key3)) {} // Wait for button release
         }
 
         if (!key4S) {
